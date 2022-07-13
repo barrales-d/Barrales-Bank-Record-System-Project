@@ -18,7 +18,7 @@ struct Account
 	int amount;
 };
 
-class User {
+class Users {
 private:
 	std::string m_userName;
 	std::string m_Name;
@@ -30,9 +30,9 @@ protected:
 	Account m_ActiveAccount;
 public:
 	//	Sign In constructor
-	User(const std::string& username, const std::string& password);
+	Users(const std::string& username, const std::string& password);
 	//	Register constructor
-	User(const std::string& username, const std::string& password, const std::string& name, const std::string& email);
+	Users(const std::string& username, const std::string& password, const std::string& name, const std::string& email);
 
 	// basic getters
 	const std::string& getName() { return m_Name; }
