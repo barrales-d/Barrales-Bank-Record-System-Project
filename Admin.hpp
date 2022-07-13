@@ -16,7 +16,7 @@ private:
 	std::map<std::string, int> m_userDatabase;
 public:
 	//	Sign in constructor uses the ADMIN.txt to fill the m_userDatabase;
-	Admin(const std::string& username, const std::string& password) : User(username, password) {
+	Admin(const std::string& username, const std::string& password) : Users(username, password) {
 		m_FileManager.open(m_fileName, std::fstream::in);
 		std::string data;
 		//read file until you find the tag ACCOUNTS
