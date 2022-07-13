@@ -135,6 +135,9 @@
     <ClInclude Include="Admin.hpp" />
     <ClInclude Include="Users.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Users\ADMIN.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
