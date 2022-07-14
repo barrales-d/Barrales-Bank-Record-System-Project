@@ -1,5 +1,6 @@
 password
 ADMIN
-BarralesBankingAdmin@gmail.com
+BarralesBankingADMIN@gmail.com
 ACCOUNTS
-dbarrales 0
+aruiz 1
+dbarrales 2

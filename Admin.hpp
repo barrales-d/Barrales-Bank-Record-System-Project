@@ -5,7 +5,6 @@
 #include <map>
 #include "Users.hpp"
 
-
 const int ZERO_CHAR_ASCII = 48;
 
 class Admin : protected Users {
@@ -22,6 +21,7 @@ public:
 
 		//	get information from file about all the users 
 		while (std::getline(m_FileManager, data)) {
+
 			//	gets the last char from the string data, then subtracts 48 from it to get the real number
 			int number_of_accounts = data.at(data.length() - 1) - ZERO_CHAR_ASCII;
 			//	resizes the string dat to only have the username, without the "space + number"

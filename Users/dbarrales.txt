@@ -1,3 +1,13 @@
 password
 Diego Barrales
 dbarrales06@gmail.com
+ACCOUNTS
+1
+Checkings
+0
+1
+Checkings
+0
+2
+Savings
+$300

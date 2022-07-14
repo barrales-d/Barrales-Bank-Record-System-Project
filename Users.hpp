@@ -4,6 +4,13 @@
 #include <string>
 #include <fstream>
 #include <stdexcept>
+#include <vector>
+
+//#define DEBUG_TOOLS //whenever I need to debug uncomment this line
+#ifdef DEBUG_TOOLS
+#include <iostream>
+#define log(x) std::cout << x << std::endl;
+#endif
 
 
 const std::string FILE_PATH = "C:\\Users\\CSUFTitan\\Documents\\Visual Studio 2022\\source\\repos\\Barrales Bank Record System Project\\Users\\";
@@ -32,6 +39,8 @@ protected:
 	std::fstream  m_FileManager;
 	std::string m_fileName;
 	Account m_ActiveAccount;
+	std::vector<Account> m_Accounts;
+
 public:
 	//	Sign In constructor
 	Users(const std::string& username, const std::string& password, bool admin = false);
@@ -43,6 +52,8 @@ public:
 	const std::string& getName() { return m_Name; }
 	const std::string& getUserName() { return m_userName; }
 	const std::string& getEmail() { return m_Email; }
+
+	const Account& getAccount(int accountNumber) { return m_Accounts[accountNumber - 1]; }
 
 	//	Takes amount from the accountNumber found in file, Returns the remaining amount in account 
 	int withdrawal(int accountNumber, int amount);

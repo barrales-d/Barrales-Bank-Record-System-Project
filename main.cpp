@@ -4,6 +4,7 @@
 #include "Users.hpp"
 #include "Admin.hpp"
 
+
 using namespace std;
 
 void SignIn();
@@ -13,6 +14,7 @@ void CreateAccount_Admin(Admin& admin);
 void WithdrawOrDeposit(Users& user);
 void Withdraw(Users& user);
 void Deposit(Users& user);
+void ViewAccount(Users& user);
 
 // ______________________MAIN______________________
 int main() {
@@ -62,6 +64,7 @@ void SignIn() {
 		try {
 			Users user(userName, password);
 			success = true;
+			WithdrawOrDeposit(user);
 		}
 		catch (const std::invalid_argument& args) {
 			cout << args.what() << endl;
@@ -72,8 +75,6 @@ void SignIn() {
 			success = false;
 		}
 	} while (!success);
-
-	//	withdrawOrDeposit();
 }
 //	!END User sign in
 
@@ -89,7 +90,7 @@ void Register() {
 	cout << "	Email: ";
 	cin >> email;
 
-	cout << "Enter Log In Information: " << endl;
+	cout << "Enter Information: " << endl;
 	cout << "	Username: ";
 	cin >> userName;
 	cout << "	Password: ";
@@ -179,7 +180,8 @@ void WithdrawOrDeposit(Users& user) {
 	do {
 		cout << "Please selected which action to take: " << endl;
 		cout << "	1---> Withdrawal" << endl;
-		cout << "	2---> Deposit\n" << endl;
+		cout << "	2---> Deposit" << endl;
+		cout << "	3---> View Account\n" << endl;
 		cout << "Enter your choice: ";
 		cin >> choice;
 		if (choice == 1) {
@@ -187,6 +189,9 @@ void WithdrawOrDeposit(Users& user) {
 		}
 		else if (choice == 2) {
 			Deposit(user);
+		}
+		else if (choice == 3) {
+			ViewAccount(user);
 		}
 		else {
 			cout << "Invalid option!" << endl;
@@ -201,4 +206,13 @@ void Withdraw(Users& user) {
 }
 void Deposit(Users& user) {
 	return;
+}
+void ViewAccount(Users& user) {
+	int accountNumber;
+	cout << "Enter the account Number you wish to view: ";
+	cin >> accountNumber;
+	Account account =  user.getAccount(accountNumber);
+	cout << "Account Number: " << account.number << endl;
+	cout << "Account Type: " << account.type << endl;
+	cout << "Amount : $" << account.amount << endl;
 }

@@ -8,6 +8,7 @@ Users::Users(const std::string& username, const std::string& password, bool admi
 	m_fileName = FILE_PATH + m_userName + ".txt";
 	m_Admin = admin;
 
+	
 	m_FileManager.open(m_fileName, std::fstream::in);
 	if (!m_FileManager.is_open()) {
 		//	file doesn't exist
@@ -24,9 +25,31 @@ Users::Users(const std::string& username, const std::string& password, bool admi
 			//	file found / opened, and passwords match!
 			std::getline(m_FileManager, m_Name);
 			std::getline(m_FileManager, m_Email);
-			m_FileManager.close();
+			if (!m_Admin) {//	if you are an admin use admin constructor only
+				std::string data = "";
+				std::getline(m_FileManager, data);
+				if (data != ACCOUNT_TAG) {
+					//	End of file no account exists yet
+					m_FileManager.close();
+				}
+				else {
+					while (!m_FileManager.eof()) {
+						//	should put all account data into a vector of accounts
+						m_FileManager >> m_ActiveAccount.number;
+						m_FileManager >> m_ActiveAccount.type;
+						m_FileManager >> data;
+						data.erase(data.begin());
+						m_ActiveAccount.amount = std::stoi(data);
+						m_Accounts.push_back(m_ActiveAccount);
+					}
+					m_FileManager.close();
+				}
+			}
+			else {
+				//close file properly so that the Admin constructor has no issues
+				m_FileManager.close();
+			}
 		}
-
 	}
 }
 //	!end of log in
@@ -83,6 +106,16 @@ Users::~Users() {
 		m_FileManager << m_Password << std::endl;
 		m_FileManager << m_Name << std::endl;
 		m_FileManager << m_Email << std::endl;
+
+		if (!m_Accounts.empty()) {//	if not empty, the constructor found accounts in the file put back accounts into file
+			m_FileManager << ACCOUNT_TAG << std::endl;
+			for (const auto& acc : m_Accounts) {
+				m_FileManager << acc.number << std::endl;
+				m_FileManager << acc.type << std::endl;
+				m_FileManager << acc.amount << std::endl;
+			}
+		}
+		m_FileManager.close();
 	}
 }
 
@@ -137,6 +170,10 @@ int Users::withdrawal(int accountNumber, int amount) {
 	}
 	//	You found account in file, you have enough money to withdrawal
 	m_ActiveAccount.amount -= amount;
+
+	//	update the account in the vector
+	m_Accounts[accountNumber - 1].amount = m_ActiveAccount.amount;
+
 	//	return remaining amount of money in account
 	return m_ActiveAccount.amount;
 }
