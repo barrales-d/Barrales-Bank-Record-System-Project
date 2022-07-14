@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <vector>
 
-#define DEBUG_TOOLS //whenever I need to debug uncomment this line
+//#define DEBUG_TOOLS //whenever I need to debug uncomment this line
 #ifdef DEBUG_TOOLS
 #include <iostream>
 #define log(x) std::cout << x << std::endl;

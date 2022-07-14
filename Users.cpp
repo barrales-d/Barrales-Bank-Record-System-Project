@@ -38,14 +38,14 @@ Users::Users(const std::string& username, const std::string& password, bool admi
 					for (int i = 0; i < number_of_accounts; i++) {
 						//	should put all account data into a vector of accounts
 						m_FileManager >> m_ActiveAccount.number;
-						log(m_ActiveAccount.number);
+						
 						m_FileManager >> m_ActiveAccount.type;
-						log(m_ActiveAccount.type);
+						
 						m_FileManager >> data;
-						log(data);
+						
 						//	erase 1 character off the beginning of string
 						data.erase(0, 1);
-						log(data);
+						
 						m_ActiveAccount.amount = std::stoi(data);
 						m_Accounts.push_back(m_ActiveAccount);
 					}
