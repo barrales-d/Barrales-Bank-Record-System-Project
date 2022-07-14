@@ -6,8 +6,6 @@
 #include "Users.hpp"
 
 
-//	tag to help find a specific location in file? 
-const std::string ACCOUNT_TAG = "ACCOUNTS";
 const int ZERO_CHAR_ASCII = 48;
 
 class Admin : protected Users {
@@ -16,7 +14,7 @@ private:
 	std::map<std::string, int> m_userDatabase;
 public:
 	//	Sign in constructor uses the ADMIN.txt to fill the m_userDatabase;
-	Admin(const std::string& username, const std::string& password) : Users(username, password) {
+	Admin(const std::string& username, const std::string& password) : Users(username, password, true) {
 		m_FileManager.open(m_fileName, std::fstream::in);
 		std::string data;
 		//read file until you find the tag ACCOUNTS
