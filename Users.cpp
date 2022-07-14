@@ -33,12 +33,19 @@ Users::Users(const std::string& username, const std::string& password, bool admi
 					m_FileManager.close();
 				}
 				else {
-					while (!m_FileManager.eof()) {
+					int number_of_accounts = 0;
+					m_FileManager >> number_of_accounts;
+					for (int i = 0; i < number_of_accounts; i++) {
 						//	should put all account data into a vector of accounts
 						m_FileManager >> m_ActiveAccount.number;
+						log(m_ActiveAccount.number);
 						m_FileManager >> m_ActiveAccount.type;
+						log(m_ActiveAccount.type);
 						m_FileManager >> data;
-						data.erase(data.begin());
+						log(data);
+						//	erase 1 character off the beginning of string
+						data.erase(0, 1);
+						log(data);
 						m_ActiveAccount.amount = std::stoi(data);
 						m_Accounts.push_back(m_ActiveAccount);
 					}
@@ -109,10 +116,11 @@ Users::~Users() {
 
 		if (!m_Accounts.empty()) {//	if not empty, the constructor found accounts in the file put back accounts into file
 			m_FileManager << ACCOUNT_TAG << std::endl;
+			m_FileManager << m_Accounts.size() << std::endl;
 			for (const auto& acc : m_Accounts) {
 				m_FileManager << acc.number << std::endl;
 				m_FileManager << acc.type << std::endl;
-				m_FileManager << acc.amount << std::endl;
+				m_FileManager << '$' << acc.amount << std::endl;
 			}
 		}
 		m_FileManager.close();

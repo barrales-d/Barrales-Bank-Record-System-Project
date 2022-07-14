@@ -211,8 +211,13 @@ void ViewAccount(Users& user) {
 	int accountNumber;
 	cout << "Enter the account Number you wish to view: ";
 	cin >> accountNumber;
-	Account account =  user.getAccount(accountNumber);
-	cout << "Account Number: " << account.number << endl;
-	cout << "Account Type: " << account.type << endl;
-	cout << "Amount : $" << account.amount << endl;
+	try {
+		Account account = user.getAccount(accountNumber);
+		cout << "\nAccount Number: " << account.number << endl;
+		cout << "Account Type: " << account.type << endl;
+		cout << "Amount : $" << account.amount << endl << endl;
+	}
+	catch (...) {
+		cout << "Account with that account number could not be found. " << endl;
+	}
 }

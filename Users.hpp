@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <vector>
 
-//#define DEBUG_TOOLS //whenever I need to debug uncomment this line
+#define DEBUG_TOOLS //whenever I need to debug uncomment this line
 #ifdef DEBUG_TOOLS
 #include <iostream>
 #define log(x) std::cout << x << std::endl;
@@ -52,8 +52,9 @@ public:
 	const std::string& getName() { return m_Name; }
 	const std::string& getUserName() { return m_userName; }
 	const std::string& getEmail() { return m_Email; }
+	std::vector<Account>& getAccountList() { return m_Accounts; }
 
-	const Account& getAccount(int accountNumber) { return m_Accounts[accountNumber - 1]; }
+	const Account& getAccount(int accountNumber) { return m_Accounts.at(accountNumber - 1); }
 
 	//	Takes amount from the accountNumber found in file, Returns the remaining amount in account 
 	int withdrawal(int accountNumber, int amount);

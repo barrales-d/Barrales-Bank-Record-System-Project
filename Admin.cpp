@@ -23,6 +23,8 @@ Admin::~Admin() {
 //	Create Account 
 int Admin::createAccount(const std::string& username, const std::string& password, const std::string& accountType, int startingAmount) {
 	int number_of_accounts = 0;
+	int accountNumber;	
+	
 	//	tries to find username within database
 	try {
 		number_of_accounts = m_userDatabase.at(username);
@@ -34,30 +36,17 @@ int Admin::createAccount(const std::string& username, const std::string& passwor
 	//	tries to log into the users account to ensure security by checking the passwords match
 	try {
 		Users user(username, password);
+		//	user has a file so create a new account for them with information provided
+		accountNumber = number_of_accounts + 1;
+		Account newAccount = { accountNumber, accountType, startingAmount };
+		//	Update the vector in this users account so that the destructor takes care of updating the file with the new account
+		user.getAccountList().push_back(newAccount);
 	}
 	catch (const std::logic_error& args) {
 		//	if they do not throw that passwords do not match and exit
 		throw std::logic_error(args.what());
 	}
-	//	username found and passwords match, file exists!
-	std::string file = ExtendFileName(username);
-	m_FileManager.open(file, std::fstream::app);
-	if (number_of_accounts == 0) {
-		//Add account tag to signify the start of account list
-		m_FileManager << ACCOUNT_TAG << std::endl;
-	}
-	int accountNumber = number_of_accounts + 1;
-	m_FileManager << accountNumber << std::endl;	//	1
-	m_FileManager << accountType << std::endl;		//	checkings
-
-	m_FileManager << "$";
-	m_FileManager << startingAmount << std::endl;	//	$500
-
-	//	END of editing User file
-	m_FileManager.close();
-	//updates the database to reflect this change
 	m_userDatabase[username] = accountNumber;
-
 	return accountNumber;
 }
 //	!end of Create Account
