@@ -202,14 +202,25 @@ void WithdrawOrDeposit(Users& user) {
 
 void Withdraw(Users& user) {
 	//	call user funciton withdraw(account, amount)
-	return;
+	int num, amount, remainingAmount = 0;
+	cout << "Enter the account number you wish to withdraw from: ";
+	cin >> num;
+	cout << "Enter the amount of money you would like to withdraw: ";
+	cin >> amount; 
+	try {
+		remainingAmount = user.withdrawal(num, amount);
+		cout << "\nOk! $" << amount << " was removed from your account, leaving you with $" << remainingAmount << " left in your account!\n" << endl;
+	}
+	catch (const std::logic_error& args) {
+		cout << args.what() << endl;
+	}
 }
 void Deposit(Users& user) {
 	return;
 }
 void ViewAccount(Users& user) {
 	int accountNumber;
-	cout << "Enter the account Number you wish to view: ";
+	cout << "Enter the account number you wish to view: ";
 	cin >> accountNumber;
 	try {
 		Account account = user.getAccount(accountNumber);

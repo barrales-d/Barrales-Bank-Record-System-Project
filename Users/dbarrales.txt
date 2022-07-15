@@ -5,7 +5,7 @@ ACCOUNTS
 2
 1
 Checkings
-$100
+$50
 2
 Savings
 $500

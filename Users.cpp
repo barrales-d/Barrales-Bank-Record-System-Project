@@ -108,22 +108,24 @@ Users::Users(const std::string& username, const std::string& password, const std
 Users::~Users() {
 	if (!m_Admin) {	// if you are not an admin don't use this destructor because we dont want to override what the admin destructor did
 		m_FileManager.open(m_fileName, std::fstream::out);
-		//	have to rewrite everything because you can not edit a file easily 
-		//	basic info
-		m_FileManager << m_Password << std::endl;
-		m_FileManager << m_Name << std::endl;
-		m_FileManager << m_Email << std::endl;
+		if (m_FileManager.is_open()) {
+			//	have to rewrite everything because you can not edit a file easily 
+			//	basic info
+			m_FileManager << m_Password << std::endl;
+			m_FileManager << m_Name << std::endl;
+			m_FileManager << m_Email << std::endl;
 
-		if (!m_Accounts.empty()) {//	if not empty, the constructor found accounts in the file put back accounts into file
-			m_FileManager << ACCOUNT_TAG << std::endl;
-			m_FileManager << m_Accounts.size() << std::endl;
-			for (const auto& acc : m_Accounts) {
-				m_FileManager << acc.number << std::endl;
-				m_FileManager << acc.type << std::endl;
-				m_FileManager << '$' << acc.amount << std::endl;
+			if (!m_Accounts.empty()) {//	if not empty, the constructor found accounts in the file put back accounts into file
+				m_FileManager << ACCOUNT_TAG << std::endl;
+				m_FileManager << m_Accounts.size() << std::endl;
+				for (const auto& acc : m_Accounts) {
+					m_FileManager << acc.number << std::endl;
+					m_FileManager << acc.type << std::endl;
+					m_FileManager << '$' << acc.amount << std::endl;
+				}
 			}
+			m_FileManager.close();
 		}
-		m_FileManager.close();
 	}
 }
 
@@ -133,7 +135,7 @@ int Users::withdrawal(int accountNumber, int amount) {
 	//	Step 1: checking accountNumber exists in file
 	m_FileManager.open(m_fileName, std::fstream::in);
 	std::string data;
-	while (std::getline(m_FileManager, data) && data != ACCOUNT_TAG) {}
+	while (std::getline(m_FileManager, data) && data != ACCOUNT_TAG) { }
 	if (data != ACCOUNT_TAG) {
 		//	You reach the end of the file without find the ACCOUNT_TAG -> no accounts exist for this user
 		throw std::logic_error("No accounts found, please contact employee to help you make one.");
@@ -141,37 +143,25 @@ int Users::withdrawal(int accountNumber, int amount) {
 
 	//	You found account_tag begin search through accounts to find account number
 	int count = 0;
+	//	read in the number of accounts 
+	m_FileManager >> count; 
 	m_ActiveAccount.number = -1;//	No account can be negative 
-	while (std::getline(m_FileManager, data) && m_ActiveAccount.number != accountNumber) {
+	for (int i = 0; i < count && m_ActiveAccount.number != accountNumber; i++) {
 		//read in data until you find the account number in file OR get to the end of a file
-		if (count == 2) {
-			//	amount in account reset count to 0
-			count = 0;
-			//	data = "$xxx" need to get rid of $ to use stoi
-			data.erase(data.begin());
-			m_ActiveAccount.amount = std::stoi(data);
-		}
-		else if (count == 1) {
-			//	account type
-			m_ActiveAccount.type = data; 
-			count++;
-		}
-		else {
-			//	account number 
-			m_ActiveAccount.number = std::stoi(data);
-			count++;
-		}
+		m_FileManager >> m_ActiveAccount.number;
+		m_FileManager >> m_ActiveAccount.type;
+		m_FileManager >> data;
+		data.erase(0, 1);
+		m_ActiveAccount.amount = std::stoi(data);
 	}
 	if (m_ActiveAccount.number != accountNumber) {
 		//	None of the accounts match the desired number -> does not exists 
 		//	i.e looking for account number: 2 when a user only has 1 account
 		throw std::logic_error("Unable to find account with the Number: " + std::to_string(accountNumber));
 	}
-	//	while loop exits before being able to read in the type and amount so if you get here read in the next 2 lines to get that data
-	m_FileManager >> m_ActiveAccount.type;
-	m_FileManager >> m_ActiveAccount.amount;
 
-	//	FINALLY DONE GETTING ACCOUNT INFORMATION FROM FILE WITHDRAWAL
+	//	FINALLY DONE GETTING ACCOUNT INFORMATION FROM FILE WITHDRAWAL CLOSE THE FILE!!!!
+	m_FileManager.close();
 
 	if (amount > m_ActiveAccount.amount) {	// amount you want is more than you have
 		throw std::logic_error("You do not have enough funds in your account to make this transaction. You only have $" + std::to_string(m_ActiveAccount.amount));
