@@ -41,7 +41,7 @@ public:
 	//	Create Account for this username
 	int createAccount(const std::string& username, const std::string& password, const std::string& accountType, int startingAmount);
 	//	Delete Account for this username
-	//	Delete Account(const std::string& username, int accountNumber);
+	void deleteAccount(const std::string& username, int accountNumber);
 
 
 };

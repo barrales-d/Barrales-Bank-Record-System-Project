@@ -11,6 +11,7 @@ void SignIn();
 void Register();
 void LogIn_Admin();
 void CreateAccount_Admin(Admin& admin);
+void DeleteAccount_Admin(Admin& admin);
 void WithdrawOrDeposit(Users& user);
 void Withdraw(Users& user);
 void Deposit(Users& user);
@@ -120,10 +121,14 @@ void LogIn_Admin() {
 		int choice;
 		cout << "Welcome Admin! What would you like to do today?" << endl;
 		cout << "	1---> Create Account" << endl;
+		cout << "	2---> Delete Account" << endl;
 		cout << "Enter your choice: ";
 		cin >> choice;
 		if (choice == 1) {
 			CreateAccount_Admin(admin);
+		}
+		else if (choice == 2) {
+			DeleteAccount_Admin(admin);
 		}
 		else {
 			cout << "Invalid Option!" << endl;
@@ -173,6 +178,29 @@ void CreateAccount_Admin(Admin& admin) {
 }
 //	!END Create Account
 
+//	Admin power :: Delete Account 
+void DeleteAccount_Admin(Admin& admin) {
+	std::string username; 
+	int num; 
+
+	cout << "Who would you like to delete an account for?" << endl;
+	cout << "	Username: ";
+	cin >> username;
+	cout << "Which Account would you like to delete today? Enter your Account number: ";
+	cin >> num;
+	
+	try {
+		admin.deleteAccount(username, num);
+		cout << "Ok! Your Account has been removed!" << endl;
+	}
+	catch (const std::logic_error& args) {
+		cout << args.what() << endl;
+	}
+}
+//	!END Delete Account
+
+
+
 //	Users power :: withdraw / deposit Amount 
 void WithdrawOrDeposit(Users& user) {
 	int choice;
@@ -200,6 +228,7 @@ void WithdrawOrDeposit(Users& user) {
 }
 //	!END withdraw or Deposit
 
+//	Users powers 
 void Withdraw(Users& user) {
 	//	call user funciton withdraw(account, amount)
 	int num, amount, remainingAmount = 0;
@@ -216,7 +245,19 @@ void Withdraw(Users& user) {
 	}
 }
 void Deposit(Users& user) {
-	return;
+	int num, amount, new_total = 0;
+	cout << "Enter the account number you wish to deposit to: ";
+	cin >> num;
+	cout << "Enter the amount of money you would like to deposit: ";
+	cin >> amount;
+	try {
+		new_total = user.deposit(num, amount);
+		cout << "Ok $" << amount << " has been deposited into your account. Your Account now holds: $" << new_total << endl;
+
+	}
+	catch (const std::logic_error& args) {
+		cout << args.what() << endl;
+	}
 }
 void ViewAccount(Users& user) {
 	int accountNumber;
@@ -232,3 +273,4 @@ void ViewAccount(Users& user) {
 		cout << "Account with that account number could not be found. " << endl;
 	}
 }
+//	!END of users powers

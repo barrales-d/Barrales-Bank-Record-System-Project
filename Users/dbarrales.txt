@@ -3,9 +3,9 @@ Diego Barrales
 dbarrales06@gmail.com
 ACCOUNTS
 2
-1
-Checkings
-$50
 2
 Savings
-$500
+$600
+3
+Checkings
+$200
