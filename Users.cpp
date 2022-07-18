@@ -180,18 +180,29 @@ int Users::withdrawal(int accountNumber, int amount) {
 //	Depositing into account 
 int Users::deposit(int accountNumber, int amount) {
 	//	check to see if the account exists
-	try {
-		m_ActiveAccount = m_Accounts.at(accountNumber - 1);
-	}
-	catch (...) {
-		throw std::logic_error("Account could not be found please try a different account number");
-	}
+	int index = getAccountIndex(accountNumber);
+	if (index == -1) { throw std::logic_error("Account could not be found please try a different account number"); }
+	
 	//	make sure that amount you want to add is positive; No negative numbers
 	if (amount <= 0) { throw std::logic_error("Please enter a valid amount to deposit, Thank you!"); }
+	m_ActiveAccount = m_Accounts.at(index);
 	m_ActiveAccount.amount += amount; 
 
-	m_Accounts[accountNumber - 1] = m_ActiveAccount;
+	m_Accounts[index] = m_ActiveAccount;
 	
 	return m_ActiveAccount.amount;
 }
 //!end of deposit
+
+//Get account index
+
+int Users::getAccountIndex(int accountNumber) {
+	int size = m_Accounts.size();
+	for (int i = 0; i < size; i++) {
+		if (accountNumber == m_Accounts[i].number) {
+			return i;
+		}
+	}
+	return -1; 
+}
+//!end of get account index

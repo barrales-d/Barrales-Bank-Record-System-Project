@@ -34,6 +34,8 @@ private:
 	std::string m_Name;
 	std::string m_Email;
 	bool m_Admin;
+
+	int getAccountIndex(int accountNumber);
 protected:
 	std::string m_Password;
 	std::fstream  m_FileManager;
