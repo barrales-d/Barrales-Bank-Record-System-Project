@@ -132,37 +132,13 @@ Users::~Users() {
 //	Withdrawing from account 
 int Users::withdrawal(int accountNumber, int amount) {
 	//	Taking money from account
-	//	Step 1: checking accountNumber exists in file
-	m_FileManager.open(m_fileName, std::fstream::in);
-	std::string data;
-	while (std::getline(m_FileManager, data) && data != ACCOUNT_TAG) { }
-	if (data != ACCOUNT_TAG) {
-		//	You reach the end of the file without find the ACCOUNT_TAG -> no accounts exist for this user
-		throw std::logic_error("No accounts found, please contact employee to help you make one.");
-	}
+	//	Step 1: check if the account vector is empty to determine if any accounts exists in this users' account
+	if (m_Accounts.empty()) { throw std::logic_error("No accounts found, please contact employee to help you make one."); }
 
-	//	You found account_tag begin search through accounts to find account number
-	int count = 0;
-	//	read in the number of accounts 
-	m_FileManager >> count; 
-	m_ActiveAccount.number = -1;//	No account can be negative 
-	for (int i = 0; i < count && m_ActiveAccount.number != accountNumber; i++) {
-		//read in data until you find the account number in file OR get to the end of a file
-		m_FileManager >> m_ActiveAccount.number;
-		m_FileManager >> m_ActiveAccount.type;
-		m_FileManager >> data;
-		data.erase(0, 1);
-		m_ActiveAccount.amount = std::stoi(data);
-	}
-	if (m_ActiveAccount.number != accountNumber) {
-		//	None of the accounts match the desired number -> does not exists 
-		//	i.e looking for account number: 2 when a user only has 1 account
-		throw std::logic_error("Unable to find account with the Number: " + std::to_string(accountNumber));
-	}
-
-	//	FINALLY DONE GETTING ACCOUNT INFORMATION FROM FILE WITHDRAWAL CLOSE THE FILE!!!!
-	m_FileManager.close();
-
+	int index = getAccountIndex(accountNumber);
+	if (index == -1) { throw std::logic_error("Unable to find account with the Number: " + std::to_string(accountNumber)); }
+	
+	m_ActiveAccount = m_Accounts.at(index);
 	if (amount > m_ActiveAccount.amount) {	// amount you want is more than you have
 		throw std::logic_error("You do not have enough funds in your account to make this transaction. You only have $" + std::to_string(m_ActiveAccount.amount));
 	}
@@ -170,7 +146,7 @@ int Users::withdrawal(int accountNumber, int amount) {
 	m_ActiveAccount.amount -= amount;
 
 	//	update the account in the vector
-	m_Accounts[accountNumber - 1].amount = m_ActiveAccount.amount;
+	m_Accounts[index] = m_ActiveAccount;
 
 	//	return remaining amount of money in account
 	return m_ActiveAccount.amount;
@@ -179,6 +155,7 @@ int Users::withdrawal(int accountNumber, int amount) {
 
 //	Depositing into account 
 int Users::deposit(int accountNumber, int amount) {
+	//	putting money in account
 	//	check to see if the account exists
 	int index = getAccountIndex(accountNumber);
 	if (index == -1) { throw std::logic_error("Account could not be found please try a different account number"); }
