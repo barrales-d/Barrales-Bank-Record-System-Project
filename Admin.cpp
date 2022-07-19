@@ -96,3 +96,39 @@ void Admin::deleteAccount(const std::string& username, int accountNumber) {
 	}
 }
 //	!end of Delete Account
+
+//	View All Accounts
+void Admin::viewAll(const std::string& username) {
+	int number_of_accounts = 0;
+	try {
+		number_of_accounts = m_userDatabase.at(username);
+	}
+	catch (...) {
+		throw std::logic_error("Username is not in the database, Cannot view bank accounts with no user account.");
+	}
+	if (number_of_accounts == 0) {
+		throw std::logic_error("You have zero bank accounts, please contact employee to help you create one.");
+	}
+
+	//	open the user file to get their password
+	std::string password;
+	m_FileManager.open(ExtendFileName(username), std::fstream::in);
+	m_FileManager >> password;
+	m_FileManager.close();
+
+	try {
+		Users user(username, password);
+		std::vector<Account> accounts = user.getAccountList();
+
+		std::cout << "\nNumber of Accounts: " << accounts.size() << std::endl;
+		for (const auto& acc : accounts) {
+			std::cout << "\n	Account Number:		" << acc.number << std::endl;
+			std::cout << "	Account Type:		" << acc.type << std::endl;
+			std::cout << "	Account Amount:		" << acc.amount << std::endl;
+		}
+	}
+	catch (const std::logic_error& args) {
+		throw std::logic_error(args.what());
+	}
+}
+//	!end of view all

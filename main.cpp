@@ -12,6 +12,7 @@ void Register();
 void LogIn_Admin();
 void CreateAccount_Admin(Admin& admin);
 void DeleteAccount_Admin(Admin& admin);
+void ViewAccounts_Admin(Admin& admin);
 void WithdrawOrDeposit(Users& user);
 void Withdraw(Users& user);
 void Deposit(Users& user);
@@ -122,6 +123,7 @@ void LogIn_Admin() {
 		cout << "Welcome Admin! What would you like to do today?" << endl;
 		cout << "	1---> Create Account" << endl;
 		cout << "	2---> Delete Account" << endl;
+		cout << "	3---> View All Accounts" << endl;
 		cout << "Enter your choice: ";
 		cin >> choice;
 		if (choice == 1) {
@@ -129,6 +131,9 @@ void LogIn_Admin() {
 		}
 		else if (choice == 2) {
 			DeleteAccount_Admin(admin);
+		}
+		else if (choice == 3) {
+			ViewAccounts_Admin(admin);
 		}
 		else {
 			cout << "Invalid Option!" << endl;
@@ -198,8 +203,23 @@ void DeleteAccount_Admin(Admin& admin) {
 	}
 }
 //	!END Delete Account
+ 
+//	Admin power :: View Accounts
+void ViewAccounts_Admin(Admin& admin) {
+	std::string username;
 
+	cout << "Whos account would you like to view today?" << endl;
+	cout << "	Username: ";
+	cin >> username;
 
+	try {
+		admin.viewAll(username);
+	}
+	catch (const std::logic_error& args) {
+		cout << args.what() << endl;
+	}
+}
+//	!END View Accounts
 
 //	Users power :: withdraw / deposit Amount 
 void WithdrawOrDeposit(Users& user) {

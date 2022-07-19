@@ -43,6 +43,8 @@ public:
 	//	Delete Account for this username
 	void deleteAccount(const std::string& username, int accountNumber);
 
+	void viewAll(const std::string& username);
+
 
 };
 #endif //	!__Admin_HPP__ 
