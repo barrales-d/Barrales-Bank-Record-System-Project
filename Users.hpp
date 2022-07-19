@@ -56,7 +56,7 @@ public:
 	const std::string& getEmail() { return m_Email; }
 	std::vector<Account>& getAccountList() { return m_Accounts; }
 
-	const Account& getAccount(int accountNumber) { return m_Accounts.at(accountNumber - 1); }
+	const Account& getAccount(int accountNumber) { return m_Accounts.at(getAccountIndex(accountNumber)); }
 
 	//	Takes amount from the accountNumber found in file, Returns the remaining amount in account 
 	int withdrawal(int accountNumber, int amount);

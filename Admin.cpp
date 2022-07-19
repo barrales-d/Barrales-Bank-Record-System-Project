@@ -41,12 +41,12 @@ int Admin::createAccount(const std::string& username, const std::string& passwor
 		Account newAccount = { accountNumber, accountType, startingAmount };
 		//	Update the vector in this users account so that the destructor takes care of updating the file with the new account
 		user.getAccountList().push_back(newAccount);
+		m_userDatabase[username] = user.getAccountList().size();
 	}
 	catch (const std::logic_error& args) {
 		//	if they do not throw that passwords do not match and exit
 		throw std::logic_error(args.what());
 	}
-	m_userDatabase[username] = accountNumber;
 	return accountNumber;
 }
 //	!end of Create Account
@@ -82,6 +82,8 @@ void Admin::deleteAccount(const std::string& username, int accountNumber) {
 		while (It != user.getAccountList().end()) {
 			if (It->number == accountNumber) {
 				user.getAccountList().erase(It);
+				//update the database information
+				m_userDatabase[username] = number_of_accounts - 1;
 				break;
 			}
 			else {

@@ -171,8 +171,7 @@ int Users::deposit(int accountNumber, int amount) {
 }
 //!end of deposit
 
-//Get account index
-
+//	Get account index
 int Users::getAccountIndex(int accountNumber) {
 	int size = m_Accounts.size();
 	for (int i = 0; i < size; i++) {
