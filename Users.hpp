@@ -18,6 +18,8 @@
 const std::string FILE_PATH = "C:\\Users\\CSUFTitan\\Documents\\Visual Studio 2022\\source\\repos\\Barrales Bank Record System Project\\Users\\";
 //	tag to help find a specific location in file? 
 const std::string ACCOUNT_TAG = "ACCOUNTS";
+const int ENTER_KEY = 13; 
+const int BACK_SPACE_KEY = 8;
 
 
 static std::string ExtendFileName(const std::string& username) { return FILE_PATH + username + ".txt"; }
@@ -25,8 +27,8 @@ static std::string getPassword() {
 	std::string password = "";
 	char c;
 	c = _getch();
-	while (c != 13) {
-		if (c == 8) {
+	while (c != ENTER_KEY) {
+		if (c == BACK_SPACE_KEY) {
 			password.pop_back();
 			std::cout << '\b';
 		}
