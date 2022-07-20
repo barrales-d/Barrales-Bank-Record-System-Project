@@ -22,28 +22,28 @@ void ViewAccount(Users& user);
 int main() {
 	int choice = 0;
 	//	step 1: sign in or register
-	cout << "Hello, welcome to Barrales Banking System!\n" << endl;
 	do {
+		cout << "\nHello, welcome to Barrales Banking System!\n" << endl;
 		cout << "	1---> Sign In" << endl;
 		cout << "	2---> Register" << endl;
-		cout << "	3---> Admin\n" << endl;
+		cout << "	3---> Admin" << endl;
+		cout << "	4---> Exit Program\n" << endl;
 		cout << "Enter your choice: ";
 		cin >> choice;
-		if (choice != 1 && choice != 2 && choice != 3)
+		if (choice == 1) {//	Sign In to existing account, try to find a file with the log in info
+			SignIn();
+		}
+		else if (choice == 2) {//	 Register an account, try to create a file with log in info
+			Register();
+		}
+		else if (choice == 3) {//	Admin: log into admin account
+			LogIn_Admin();
+		}
+		if (choice > 4 || choice < 1)
 		{
 			cout << "Invalid Option!" << endl;
 		}
-	} while (choice != 1 && choice != 2 && choice != 3);
-
-	if (choice == 1) {//	Sign In to existing account, try to find a file with the log in info
-		SignIn();
-	}
-	else if (choice == 2) {//	 Register an account, try to create a file with log in info
-		Register();
-	}
-	else if (choice == 3) {//	Admin: log into admin account
-		LogIn_Admin();
-	}
+	} while (choice != 4);
 	return 0;
 }
 // _____________________!_END_MAIN_________________________
@@ -105,6 +105,7 @@ void Register() {
 	catch (const std::invalid_argument& args) {
 		cout << args.what() << endl;
 	}
+	cout << "\nOk your Account has been created, please sign in\n" << endl;
 	SignIn();
 }
 //	!END Register
@@ -112,7 +113,7 @@ void Register() {
 //	Admin power :: logging into admin account
 void LogIn_Admin() {
 	std::string userName, password;
-	cout << "Enter Log In Information: " << endl;
+	cout << "Enter Admin Log In Information: " << endl;
 	cout << "	Username: ";
 	cin >> userName;
 	cout << "	Password: ";
@@ -120,24 +121,27 @@ void LogIn_Admin() {
 	try {
 		Admin admin(userName, password);
 		int choice;
-		cout << "Welcome Admin! What would you like to do today?" << endl;
-		cout << "	1---> Create Account" << endl;
-		cout << "	2---> Delete Account" << endl;
-		cout << "	3---> View All Accounts" << endl;
-		cout << "Enter your choice: ";
-		cin >> choice;
-		if (choice == 1) {
-			CreateAccount_Admin(admin);
-		}
-		else if (choice == 2) {
-			DeleteAccount_Admin(admin);
-		}
-		else if (choice == 3) {
-			ViewAccounts_Admin(admin);
-		}
-		else {
-			cout << "Invalid Option!" << endl;
-		}
+		cout << "\nWelcome Admin! What would you like to do today?" << endl;
+		do {
+			cout << "	1---> Create Account" << endl;
+			cout << "	2---> Delete Account" << endl;
+			cout << "	3---> View All Accounts" << endl;
+			cout << "	4---> Sign Out" << endl;
+			cout << "Enter your choice: ";
+			cin >> choice;
+			if (choice == 1) {
+				CreateAccount_Admin(admin);
+			}
+			else if (choice == 2) {
+				DeleteAccount_Admin(admin);
+			}
+			else if (choice == 3) {
+				ViewAccounts_Admin(admin);
+			}
+			else if(choice > 4 || choice < 1) {
+				cout << "Invalid Option!" << endl;
+			}
+		} while (choice != 4);
 	}
 	catch (const std::invalid_argument& args) {
 		cout << args.what() << endl;
@@ -155,12 +159,12 @@ void CreateAccount_Admin(Admin& admin) {
 	std::string username, password, accountType;
 	int amount;
 
-	cout << "What type of account would to like to open?(Checkings or Savings) ";
+	cout << "\nWhat type of account would to like to open?(Checkings or Savings) ";
 	cin >> accountType;
 	cout << "How much would you like to deposit as a starting amount? ";
 	cin >> amount;
 	do {
-		cout << "Who would you like to make an account for?" << endl;
+		cout << "\nWho would you like to make an account for?" << endl;
 		cout << "	Username: ";
 		cin >> username;
 		cout << "	Password: ";
@@ -169,8 +173,8 @@ void CreateAccount_Admin(Admin& admin) {
 		try {
 			int accountNumber = admin.createAccount(username, password, accountType, amount);
 
-			cout << "Ok, your account has been made. You will be able to deposite and withdrawal money from it!" << endl;
-			cout << "Please remember your account Number is: " << accountNumber << endl;
+			cout << "\nOk, your account has been made. You will be able to deposite and withdrawal money from it!" << endl;
+			cout << "	Please remember your account Number is: " << accountNumber << endl;
 			//	Once the program gets here we know everything worked you can exit the loop
 			success = true;
 		}
@@ -188,7 +192,7 @@ void DeleteAccount_Admin(Admin& admin) {
 	std::string username; 
 	int num; 
 
-	cout << "Who would you like to delete an account for?" << endl;
+	cout << "\nWho would you like to delete an account for?" << endl;
 	cout << "	Username: ";
 	cin >> username;
 	cout << "Which Account would you like to delete today? Enter your Account number: ";
@@ -196,7 +200,7 @@ void DeleteAccount_Admin(Admin& admin) {
 	
 	try {
 		admin.deleteAccount(username, num);
-		cout << "Ok! Your Account has been removed!" << endl;
+		cout << "\nOk! Your Account has been removed!" << endl;
 	}
 	catch (const std::logic_error& args) {
 		cout << args.what() << endl;
@@ -208,7 +212,7 @@ void DeleteAccount_Admin(Admin& admin) {
 void ViewAccounts_Admin(Admin& admin) {
 	std::string username;
 
-	cout << "Whos account would you like to view today?" << endl;
+	cout << "\nWho's account would you like to view today?" << endl;
 	cout << "	Username: ";
 	cin >> username;
 
@@ -224,12 +228,13 @@ void ViewAccounts_Admin(Admin& admin) {
 //	Users power :: withdraw / deposit Amount 
 void WithdrawOrDeposit(Users& user) {
 	int choice;
-	cout << "Welcome to your account " << user.getName() << '!' << endl;
+	cout << "\nWelcome to your account " << user.getName() << '!' << endl;
 	do {
 		cout << "Please selected which action to take: " << endl;
 		cout << "	1---> Withdrawal" << endl;
 		cout << "	2---> Deposit" << endl;
-		cout << "	3---> View Account\n" << endl;
+		cout << "	3---> View Account" << endl;
+		cout << "	4---> Sign Out\n" << endl;
 		cout << "Enter your choice: ";
 		cin >> choice;
 		if (choice == 1) {
@@ -241,10 +246,10 @@ void WithdrawOrDeposit(Users& user) {
 		else if (choice == 3) {
 			ViewAccount(user);
 		}
-		else {
+		else if(choice > 4 || choice < 1) {
 			cout << "Invalid option!" << endl;
 		}
-	} while (choice != 1 && choice != 2);
+	} while (choice != 4);
 }
 //	!END withdraw or Deposit
 
@@ -272,7 +277,7 @@ void Deposit(Users& user) {
 	cin >> amount;
 	try {
 		new_total = user.deposit(num, amount);
-		cout << "Ok $" << amount << " has been deposited into your account. Your Account now holds: $" << new_total << endl;
+		cout << "\nOk $" << amount << " has been deposited into your account. Your Account now holds: $" << new_total << endl;
 
 	}
 	catch (const std::logic_error& args) {

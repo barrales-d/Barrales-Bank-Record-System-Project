@@ -126,6 +126,7 @@ void Admin::viewAll(const std::string& username) {
 			std::cout << "	Account Type:		" << acc.type << std::endl;
 			std::cout << "	Account Amount:		" << acc.amount << std::endl;
 		}
+		std::cout << std::endl;
 	}
 	catch (const std::logic_error& args) {
 		throw std::logic_error(args.what());

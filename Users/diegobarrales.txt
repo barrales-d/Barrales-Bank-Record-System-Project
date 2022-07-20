@@ -2,10 +2,7 @@ password
 Diego Barrales
 dbarrales06@gmail.com
 ACCOUNTS
-2
-2
-Savings
-$400
-3
+1
+1
 Checkings
 $300

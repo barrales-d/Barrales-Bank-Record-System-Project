@@ -4,4 +4,5 @@ BarralesBankingADMIN@gmail.com
 ACCOUNTS
 aruiz 1
 dbarrales 2
+diegobarrales 1
 johnDoe 1

@@ -42,7 +42,7 @@ public:
 	int createAccount(const std::string& username, const std::string& password, const std::string& accountType, int startingAmount);
 	//	Delete Account for this username
 	void deleteAccount(const std::string& username, int accountNumber);
-
+	//	View Accounts for this username
 	void viewAll(const std::string& username);
 
 
