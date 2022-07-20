@@ -60,7 +60,7 @@ void SignIn() {
 		cout << "	Username: ";
 		cin >> userName;
 		cout << "	Password: ";
-		cin >> password;
+		password = getPassword();
 
 		// step 2: try to create an instance of a user with username and password
 		try {
@@ -117,7 +117,7 @@ void LogIn_Admin() {
 	cout << "	Username: ";
 	cin >> userName;
 	cout << "	Password: ";
-	cin >> password;
+	password = getPassword();
 	try {
 		Admin admin(userName, password);
 		int choice;
@@ -168,7 +168,7 @@ void CreateAccount_Admin(Admin& admin) {
 		cout << "	Username: ";
 		cin >> username;
 		cout << "	Password: ";
-		cin >> password;
+		password = getPassword();
 
 		try {
 			int accountNumber = admin.createAccount(username, password, accountType, amount);

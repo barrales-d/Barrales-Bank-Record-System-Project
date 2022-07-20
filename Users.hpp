@@ -5,6 +5,8 @@
 #include <fstream>
 #include <stdexcept>
 #include <vector>
+#include <iostream>
+#include <conio.h>
 
 //#define DEBUG_TOOLS //whenever I need to debug uncomment this line
 #ifdef DEBUG_TOOLS
@@ -19,6 +21,23 @@ const std::string ACCOUNT_TAG = "ACCOUNTS";
 
 
 static std::string ExtendFileName(const std::string& username) { return FILE_PATH + username + ".txt"; }
+static std::string getPassword() {
+	std::string password = "";
+	char c;
+	c = _getch();
+	while (c != 13) {
+		if (c == 8) {
+			password.pop_back();
+			std::cout << '\b';
+		}
+		else {
+			password.push_back(c);
+			std::cout << '*';
+		}
+		c = _getch();
+	}
+	return password;
+}
 
 
 struct Account
