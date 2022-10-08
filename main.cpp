@@ -317,7 +317,7 @@ int main() {
 	dob.year = 2002; 
 	Customer customer = Customer("123456789", "Diego", "Barrales", dob);
 	dob.day = 8;
-	Employee employee1 = Employee("987654321", "Alondra", "ruiz", dob, 900.00f);
+	Employee employee1 = Employee("987654321", "Alondra", "ruiz", dob, 900.10f);
 
 	Database Bank;
 
@@ -329,6 +329,8 @@ int main() {
 	Bank.createTuple<Employee>(employee1);
 	Bank.createTuple<Customer>(customer);
 
-	Bank.loadTuple<Employee>(Database::Tables::Employees);
+	Employee em; 
+	Bank.loadTuple<Employee>(Database::Tables::Employees, em);
+	
 	return 0;
 }

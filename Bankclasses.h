@@ -10,6 +10,29 @@ using namespace std;
 const string SP = ", "; // Separater
 /*	Struct to hold a Date: mm/dd/yr	*/
 struct Date {
+	Date() = default;
+	Date(int m, int d, int y) {
+		month = m; 
+		day = d; 
+		year = y;
+	}
+	//	"mm/dd/yr"
+	Date(string& date) {	
+		string digits = "";
+		for (int i = 0; i < date.size(); i++) {//[ 1,0,/,9,/,2,0,0,2 ]
+			if (date[i] == '/') {
+				int temp = stoi(digits);
+				if (i < 3)
+					month = temp;
+				else if (i >= 3 && i < 6)
+					day = temp; 
+				digits = "";
+			}else 
+				digits += date[i];
+		}
+		year = stoi(digits);
+	}
+
 	int day;
 	int month;
 	int year;
@@ -60,7 +83,6 @@ public:
 	string virtual createTuple() {
 		return Ssn + SP + Fname + SP + Lname + SP + DoB.to_string();
 	};
-protected:
 	string Ssn;
 	string Fname;
 	string Lname;
@@ -87,11 +109,10 @@ public:
 		Person::display();
 		cout << "Number of accounts: " << numberOfAccounts << endl;
 	}
-	string createTuple() {
-		return Person::createTuple() + SP + to_string(numberOfAccounts);
-	}
+	// Data implementation
 	string Entity() { return "Customers"; }
 	string Attributes() { return "Ssn, Fname, Lname, DoB, Number of Accounts"; }
+	string createTuple() { return Person::createTuple() + SP + to_string(numberOfAccounts); }
 private:
 	int numberOfAccounts;
 };
@@ -125,14 +146,10 @@ public:
 		cout << endl;
 	}
 	string& SSN() { return Ssn; }
-	void setSSN(const string& ssn) { Ssn = ssn; }
-	void setFname(const string& fn) { Fname = fn; }
-	void setLname(const string& ln) { Lname = ln; }
-	void setdob(const Date& dob) { DoB = dob; }
-	void setSalary(float sal) { Salary = sal; }
-	void setMssn(string* manager) { Mssn = manager; }
-
-	string  createTuple() {
+	//	Data implementation
+	string Entity() { return "Employees"; }
+	string Attributes() { return "Ssn, Fname, Lname, DoB, Salary, Mssn"; }
+	string createTuple() {
 		string manager;
 		if (Mssn)
 			manager = *Mssn;
@@ -140,13 +157,9 @@ public:
 			manager = "null";
 		return Person::createTuple() + SP + to_string(Salary) + SP + manager;
 	}
-
-	string Entity() { return "Employees"; }
-	string Attributes() { return "Ssn, Fname, Lname, DoB, Salary, Mssn"; }
-
-private:
 	float Salary;
 	string* Mssn;
+private:
 };
 
 /*
@@ -165,11 +178,11 @@ public:
 	) : Type(t), Amount(a), AccNumber(an) {
 		Cssn = customer;
 	};
-	string createTuple() {
-		return Type + SP + to_string(Amount) + AccNumber + *Cssn;
-	}
+
+	//Data implementation
 	string Entity() { return "Accounts"; }
 	string Attributes() { return "Type, Amount, Account Number, Cssn"; }
+	string createTuple() { return Type + SP + to_string(Amount) + AccNumber + *Cssn; }
 private:
 	string Type;
 	float Amount;
@@ -191,12 +204,12 @@ public:
 		Acc = a;
 		date = d;
 	}
-	string createTuple() {
-		//	Should never have a null value
-		return *Essn + SP + *Acc + SP + date;
-	}
+
+	//	Data implementation
 	string Entity() { return "Created Accounts"; }
 	string Attributes() { return "Essm, Account Number, Date"; }
+	//	Should never have a null value
+	string createTuple() { return *Essn + SP + *Acc + SP + date.to_string(); }
 private:
 	string* Essn;
 	string* Acc;

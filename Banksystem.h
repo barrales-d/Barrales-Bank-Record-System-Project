@@ -29,7 +29,6 @@ public:
 			fileManager << T().Attributes() << endl;
 		}
 		fileManager.close();
-		
 	}
 	template <typename T>
 	void createTuple(T arg) {
@@ -41,29 +40,35 @@ public:
 		fileManager.close();
 	}
 	template<typename T>
-	T loadTuple(const Tables& arg) {
+	void loadTuple(const Tables& arg, T& container) {
 		filename = filePath + T().Entity() + ".csv";
-		fileManager.open(filename, std::ios::in);
-		T container; 
+		fileManager.open(filename, std::ios::in); 
 		string data;
 		getline(fileManager, data);// grab headers throw away
 		switch (arg) {
 		case Tables::Customers: 
 			break; 
 		case Tables::Employees:
+			fileManager >> container.Ssn;
+			container.Ssn.erase(container.Ssn.end() - 1);	
+			fileManager >> container.Fname; 
+			container.Fname.erase(container.Fname.end() - 1);
+			fileManager >> container.Lname; 
+			container.Lname.erase(container.Lname.end() - 1);
 			fileManager >> data;
 			data.erase(data.end() - 1);
-			container.setSSN(data);
-			cout << container.SSN() <<endl;
-			fileManager.close();
+			container.DoB = Date(data);
+			fileManager >> container.Salary;
+			/*fileManager >> data; 
+			data.erase(data.end() - 1);
+			*(container.Mssn) = data;
+			fileManager.close();*/
 			break; 
 		case Tables::Accounts:
 			break;
 		case Tables::CreateAccounts:
 			break;
 		}
-
-		return container;
 	}
 private:
 	std::fstream fileManager;
