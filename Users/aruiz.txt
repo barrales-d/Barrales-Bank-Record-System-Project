@@ -2,7 +2,10 @@ password
 Alondra Ruiz
 aruiz@gmail.com
 ACCOUNTS
-1
+2
 1
 checkings
+$300
+2
+Savings
 $200

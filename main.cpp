@@ -1,6 +1,13 @@
 #include <iostream>
 
 
+using namespace std;
+
+#ifdef __SQL_BANK_SYSTEM__
+
+#include <iostream>
+
+
 #include "Users.hpp"
 #include "Admin.hpp"
 
@@ -299,3 +306,29 @@ void ViewAccount(Users& user) {
 	}
 }
 //	!END of users powers
+#endif
+
+#include "Banksystem.h"
+
+int main() {
+	Date dob;
+	dob.day = 9; 
+	dob.month = 10; 
+	dob.year = 2002; 
+	Customer customer = Customer("123456789", "Diego", "Barrales", dob);
+	dob.day = 8;
+	Employee employee1 = Employee("987654321", "Alondra", "ruiz", dob, 900.00f);
+
+	Database Bank;
+
+	Bank.createTable<Employee>();
+	Bank.createTable<Customer>();
+	Bank.createTable<Account>();
+	Bank.createTable<CreateAccount>();
+
+	Bank.createTuple<Employee>(employee1);
+	Bank.createTuple<Customer>(customer);
+
+	Bank.loadTuple<Employee>(Database::Tables::Employees);
+	return 0;
+}
